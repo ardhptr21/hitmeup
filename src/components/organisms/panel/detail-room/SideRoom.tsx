@@ -19,6 +19,6 @@ export default function SideRoom({ room, userId }: SideRoomProps) {
       onCancel={() => setIsEdit(false)}
     />
   ) : (
-    <InfoSideRoom room={room} onEdit={() => setIsEdit(true)} />
+    <InfoSideRoom userId={userId} room={room} onEdit={() => setIsEdit(true)} />
   );
 }

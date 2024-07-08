@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { cn, relativeToAppURL } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import {
   Calendar,
@@ -35,10 +35,7 @@ export default function CardRoom({
   isActive,
 }: CardRoomProps) {
   const [copied, setCopied] = useState(false);
-  const roomURL = useMemo(
-    () => `${process.env.NEXT_PUBLIC_APP_URL}/r/${slug}`,
-    [slug]
-  );
+  const roomURL = useMemo(() => relativeToAppURL("r", slug), [slug]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(roomURL);

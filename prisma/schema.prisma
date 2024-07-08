@@ -31,7 +31,7 @@ model Room {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  user     User      @relation(fields: [userId], references: [id])
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   messages Message[]
 
   @@map("rooms")
@@ -43,7 +43,7 @@ model Message {
   text      String   @db.Text
   createdAt DateTime @default(now()) @map("created_at")
 
-  room Room @relation(fields: [roomId], references: [id])
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
 
   @@map("messages")
 }

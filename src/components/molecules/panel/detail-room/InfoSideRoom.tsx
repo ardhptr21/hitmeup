@@ -1,5 +1,6 @@
 "use client";
 
+import { setRoomActiveAction } from "@/actions/room";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,36 +10,53 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { cn, relativeToAppURL } from "@/lib/utils";
 import { Room } from "@prisma/client";
+import { formatDistanceToNow } from "date-fns";
 import {
   Calendar,
   CircleCheckBig,
   Copy,
   Lock,
+  LockOpen,
   Pencil,
-  Trash,
 } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
 import { useMemo, useState } from "react";
-import { formatDistanceToNow } from "date-fns";
-import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import DeleteRoom from "./DeleteRoom";
 
 type InfoSideRoomProps = {
+  userId: number;
   room: Room;
   onEdit?: () => void;
 };
 
-export default function InfoSideRoom({ room, onEdit }: InfoSideRoomProps) {
+export default function InfoSideRoom({
+  userId,
+  room,
+  onEdit,
+}: InfoSideRoomProps) {
   const [copied, setCopied] = useState(false);
-  const roomURL = useMemo(
-    () => `${process.env.NEXT_PUBLIC_APP_URL}/r/${room.slug}`,
-    [room.slug]
-  );
+  const roomURL = useMemo(() => relativeToAppURL("r", room.slug), [room.slug]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(roomURL);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  const { execute: setRoomActive, isExecuting } = useAction(
+    setRoomActiveAction,
+    {
+      onSuccess: () => {
+        toast.success("Change room active state success.");
+      },
+      onError: (error) => {
+        toast.error(error.error.fetchError);
+      },
+    }
+  );
 
   return (
     <Card className="w-full top-24 lg:max-w-xl lg:sticky">
@@ -83,16 +101,33 @@ export default function InfoSideRoom({ room, onEdit }: InfoSideRoomProps) {
           </div>
         </div>
         <div className="flex flex-col w-full gap-3 md:gap-5 md:flex-row">
-          <Button className="w-full gap-2" variant="destructive">
-            <Trash className="w-4 h-4" /> Delete
-          </Button>
-          <Button className="w-full gap-2" onClick={onEdit}>
+          <DeleteRoom userId={userId} roomId={room.id} disabled={isExecuting} />
+          <Button
+            className="w-full gap-2"
+            onClick={onEdit}
+            disabled={isExecuting}
+          >
             <Pencil className="w-4 h-4" />
             Edit
           </Button>
-          <Button className="w-full gap-2" variant="outline">
-            <Lock className="w-4 h-4" />
-            Deactivate
+          <Button
+            className="w-full gap-2"
+            variant="outline"
+            disabled={isExecuting}
+            onClick={() =>
+              setRoomActive({
+                roomId: room.id,
+                userId,
+                isActive: !room.isActive,
+              })
+            }
+          >
+            {room.isActive ? (
+              <Lock className="w-4 h-4" />
+            ) : (
+              <LockOpen className="w-4 h-4" />
+            )}
+            {room.isActive ? "Deactivate" : "Activate"}
           </Button>
         </div>
       </CardFooter>

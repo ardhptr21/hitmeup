@@ -40,3 +40,14 @@ export const editRoomUser = async (
 ) => {
   return await db.room.update({ where: { id: roomId }, data });
 };
+
+export const deleteRoom = async (roomId: number) => {
+  return await db.room.delete({ where: { id: roomId } });
+};
+
+export const setRoomActive = async (roomId: number, isActive: boolean) => {
+  return await db.room.update({
+    where: { id: roomId },
+    data: { isActive },
+  });
+};
