@@ -1,4 +1,5 @@
 import db from "@/lib/db";
+import { Prisma } from "@prisma/client";
 
 export const totalUserRoom = async (userId: number) => {
   return await db.room.count({ where: { userId } });
@@ -27,4 +28,8 @@ export const detailUserRoom = async (userId: number, roomId: number) => {
   return await db.room.findFirst({
     where: { userId, id: roomId },
   });
+};
+
+export const newRoom = async (data: Prisma.RoomCreateInput) => {
+  return await db.room.create({ data });
 };
