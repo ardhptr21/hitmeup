@@ -3,19 +3,22 @@ import CardRoom from "@/components/molecules/card/CardRoom";
 import { Button } from "@/components/ui/button";
 
 import { Inbox } from "lucide-react";
+import Link from "next/link";
 
 export default function Room() {
   return (
     <>
       <section className="container">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <PanelTitle>Room</PanelTitle>
-          <Button className="gap-2">
-            <Inbox /> New Room
+          <Button asChild className="gap-2">
+            <Link href="/panel/room/new">
+              <Inbox /> New Room
+            </Link>
           </Button>
         </div>
       </section>
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 container my-20">
+      <section className="container grid grid-cols-1 gap-3 my-20 md:grid-cols-2 lg:grid-cols-3">
         <CardRoom
           title="Tempat Bagus di Surabaya"
           slug="tempat-bagus-surabaya"
