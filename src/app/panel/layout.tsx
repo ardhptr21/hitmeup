@@ -1,7 +1,14 @@
 import PanelBar from "@/components/molecules/navbar/PanelBar";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 import { PropsWithChildren } from "react";
 
-export default function PanelLayout({ children }: Readonly<PropsWithChildren>) {
+export default async function PanelLayout({
+  children,
+}: Readonly<PropsWithChildren>) {
+  const session = await auth();
+  if (!session) return redirect("/");
+
   return (
     <>
       <PanelBar />

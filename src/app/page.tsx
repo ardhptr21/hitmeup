@@ -1,4 +1,10 @@
-export default function Home() {
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
+
+export default async function Home() {
+  const session = await auth();
+  if (session) return redirect("/panel");
+
   return (
     <main className="container h-screen px-10 py-32 mx-auto md:py-60">
       <section className="flex flex-col h-full gap-20 md:gap-0 md:justify-between">
