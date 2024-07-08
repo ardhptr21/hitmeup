@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { newRoomAction } from "@/actions/room";
 import { useAction } from "next-safe-action/hooks";
 
-import MessageBox from "@/components/molecules/MessageBox";
+import MessageBoxSample from "@/components/molecules/box/MessageBoxSample";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -23,9 +23,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Save } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 type NewRoomFormProps = {
   userId: number;
@@ -152,10 +152,9 @@ export default function NewRoomForm({ userId }: NewRoomFormProps) {
           </Form>
         </CardContent>
       </Card>
-      <MessageBox
+      <MessageBoxSample
         title={title || "[Room Title]"}
         description={description || "[Room description will goes here]"}
-        disabled
       />
     </section>
   );

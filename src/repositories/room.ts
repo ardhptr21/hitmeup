@@ -51,3 +51,9 @@ export const setRoomActive = async (roomId: number, isActive: boolean) => {
     data: { isActive },
   });
 };
+
+export const getRoomBySlugActive = async (slug: string) => {
+  return await db.room.findFirst({
+    where: { slug, isActive: true },
+  });
+};

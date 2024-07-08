@@ -7,3 +7,9 @@ export const getMessagesByRoom = async (roomId: number) => {
     orderBy: { createdAt: "desc" },
   });
 };
+
+export const createMessage = async (roomId: number, text: string) => {
+  return await db.message.create({
+    data: { roomId, text },
+  });
+};

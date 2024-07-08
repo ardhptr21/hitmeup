@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { getMessagesByRoom } from "@/repositories/messages";
+import { getMessagesByRoom } from "@/repositories/message";
 import { isRoomWithUserExists } from "@/repositories/room";
 import { NextRequest, NextResponse } from "next/server";
 
