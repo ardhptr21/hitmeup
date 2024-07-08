@@ -4,6 +4,11 @@ export const totalUserRoom = async (userId: number) => {
   return await db.room.count({ where: { userId } });
 };
 
+export const isRoomExists = async (roomId: number) => {
+  const count = await db.room.count({ where: { id: roomId } });
+  return count > 0;
+};
+
 export const getUserRooms = async (userId: number) => {
   return await db.room.findMany({
     where: { userId },
@@ -14,6 +19,7 @@ export const getUserRooms = async (userId: number) => {
       isActive: true,
       createdAt: true,
     },
+    orderBy: { createdAt: "desc" },
   });
 };
 

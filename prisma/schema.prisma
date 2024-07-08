@@ -31,7 +31,19 @@ model Room {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  user User @relation(fields: [userId], references: [id])
+  user     User      @relation(fields: [userId], references: [id])
+  messages Message[]
 
   @@map("rooms")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  roomId    Int      @map("room_id")
+  text      String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  room Room @relation(fields: [roomId], references: [id])
+
+  @@map("messages")
 }

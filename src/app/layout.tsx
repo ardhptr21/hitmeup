@@ -1,6 +1,7 @@
+import QueryProvider from "@/providers/query-provider";
+import { Metadata } from "next";
 import { PropsWithChildren } from "react";
 import "./globals.css";
-import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Hit Me Up by ardhptr21",
@@ -11,7 +12,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <QueryProvider>{children}</QueryProvider>
+      </body>
     </html>
   );
 }
