@@ -3,6 +3,8 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { PropsWithChildren } from "react";
 
+export const dynamic = "force-dynamic";
+
 export default async function PanelLayout({
   children,
 }: Readonly<PropsWithChildren>) {

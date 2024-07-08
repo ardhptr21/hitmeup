@@ -1,11 +1,16 @@
 import PanelTitle from "@/components/atoms/typography/PanelTitle";
 import CardRoom from "@/components/molecules/card/CardRoom";
 import { Button } from "@/components/ui/button";
+import { auth } from "@/lib/auth";
+import { getUserRooms } from "@/repositories/room";
 
 import { Inbox } from "lucide-react";
 import Link from "next/link";
 
-export default function Room() {
+export default async function Room() {
+  const { user } = (await auth())!;
+  const rooms = await getUserRooms(user.id);
+
   return (
     <>
       <section className="container">
@@ -19,18 +24,22 @@ export default function Room() {
         </div>
       </section>
       <section className="container grid grid-cols-1 gap-3 my-20 md:grid-cols-2 lg:grid-cols-3">
-        <CardRoom
-          title="Tempat Bagus di Surabaya"
-          slug="tempat-bagus-surabaya"
-          isActive={true}
-          createdAt="2 days ago"
-        />
-        <CardRoom
-          title="Info Barang Kos Bagus"
-          slug="barang-kos"
-          isActive={false}
-          createdAt="10 days ago"
-        />
+        {rooms.length === 0 ? (
+          <div className="flex items-center justify-center col-span-full">
+            <p className="text-gray-500 ">You don{"'"}t have any room yet.</p>
+          </div>
+        ) : (
+          rooms.map((room) => (
+            <CardRoom
+              key={room.id}
+              id={room.id}
+              title={room.title}
+              slug={room.slug}
+              isActive={room.isActive}
+              createdAt={room.createdAt}
+            />
+          ))
+        )}
       </section>
     </>
   );

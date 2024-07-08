@@ -9,39 +9,59 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Calendar, CircleCheckBig, Copy } from "lucide-react";
-import { useState } from "react";
+import { formatDistanceToNow } from "date-fns";
+import {
+  Calendar,
+  CircleCheckBig,
+  Copy,
+  SquareArrowOutUpRight,
+} from "lucide-react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
 
 type CardRoomProps = {
+  id: number;
   title: string;
   slug: string;
-  createdAt: string;
+  createdAt: Date;
   isActive: boolean;
 };
 
 export default function CardRoom({
+  id,
   title,
   slug,
   createdAt,
   isActive,
 }: CardRoomProps) {
   const [copied, setCopied] = useState(false);
+  const roomURL = useMemo(
+    () => `${process.env.NEXT_PUBLIC_APP_URL}/r/${slug}`,
+    [slug]
+  );
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(`https://hitmeup.com/r/${slug}`);
+    navigator.clipboard.writeText(roomURL);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <Card className="hover:cursor-pointer">
+    <Card className="relative">
       <CardHeader>
+        <div className="absolute text-right -right-2 -top-2">
+          <Button asChild size="icon" variant="outline">
+            <Link href={`/panel/room/${id}`}>
+              <SquareArrowOutUpRight />
+            </Link>
+          </Button>
+        </div>
         <CardTitle className="text-2xl font-bold">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="bg-muted py-2 px-5 rounded-xl flex justify-between items-center gap-2">
-          <p className="text-nowrap overflow-hidden w-full overflow-x-scroll text-muted-foreground no-scrollbar">
-            https://hitmeup.com/r/{slug}
+        <div className="flex items-center justify-between gap-2 px-5 py-2 bg-muted rounded-xl">
+          <p className="w-full overflow-hidden overflow-x-scroll text-nowrap text-muted-foreground no-scrollbar">
+            {roomURL}
           </p>
           <Button variant="ghost" size="icon" onClick={copyToClipboard}>
             {copied ? (
@@ -53,10 +73,12 @@ export default function CardRoom({
         </div>
       </CardContent>
       <CardFooter>
-        <div className="flex justify-between items-center w-full">
-          <p className="text-muted-foreground flex items-center text-sm">
+        <div className="flex items-center justify-between w-full">
+          <p className="flex items-center text-sm text-muted-foreground">
             <Calendar className="w-4 h-4" />
-            <span className="ml-2">Created {createdAt}</span>
+            <span className="ml-2">
+              Created {formatDistanceToNow(createdAt)}
+            </span>
           </p>
           <div className="flex items-center gap-2">
             <div

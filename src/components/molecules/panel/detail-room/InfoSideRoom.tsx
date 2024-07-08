@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Room } from "@prisma/client";
 import {
   Calendar,
   CircleCheckBig,
@@ -17,17 +18,24 @@ import {
   Pencil,
   Trash,
 } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { formatDistanceToNow } from "date-fns";
+import { cn } from "@/lib/utils";
 
 type InfoSideRoomProps = {
+  room: Room;
   onEdit?: () => void;
 };
 
-export default function InfoSideRoom({ onEdit }: InfoSideRoomProps) {
+export default function InfoSideRoom({ room, onEdit }: InfoSideRoomProps) {
   const [copied, setCopied] = useState(false);
+  const roomURL = useMemo(
+    () => `${process.env.NEXT_PUBLIC_APP_URL}/r/${room.slug}`,
+    [room.slug]
+  );
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(`https://hitmeup.com/r/hahahoho`);
+    navigator.clipboard.writeText(roomURL);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -35,18 +43,15 @@ export default function InfoSideRoom({ onEdit }: InfoSideRoomProps) {
   return (
     <Card className="w-full top-24 lg:max-w-xl lg:sticky">
       <CardHeader>
-        <CardTitle className="text-2xl">Rekomendasi Tempat Surabaya</CardTitle>
+        <CardTitle className="text-2xl">{room.title}</CardTitle>
         <CardDescription className="text-lg">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat optio
-          blanditiis harum aspernatur eveniet ut? Nisi praesentium, officiis
-          autem asperiores vel deserunt quis quia veritatis cumque maiores
-          necessitatibus ex ipsam?
+          {room.description}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-between gap-2 px-5 py-2 bg-muted rounded-xl">
           <p className="w-full overflow-hidden overflow-x-scroll text-nowrap text-muted-foreground no-scrollbar">
-            https://hitmeup.com/r/hahahoho
+            {roomURL}
           </p>
           <Button variant="ghost" size="icon" onClick={copyToClipboard}>
             {copied ? (
@@ -61,11 +66,20 @@ export default function InfoSideRoom({ onEdit }: InfoSideRoomProps) {
         <div className="flex items-center justify-between w-full">
           <p className="flex items-center text-sm text-muted-foreground">
             <Calendar className="w-4 h-4" />
-            <span className="ml-2">Created 2 days ago</span>
+            <span className="ml-2">
+              Created {formatDistanceToNow(room.createdAt)}
+            </span>
           </p>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-            <p className="text-muted-foreground">Active</p>
+            <div
+              className={cn(
+                "h-3 w-3 rounded-full",
+                room.isActive ? "bg-green-500 animate-pulse" : "bg-destructive"
+              )}
+            ></div>
+            <p className="text-muted-foreground">
+              {room.isActive ? "Active" : "Inactive"}
+            </p>
           </div>
         </div>
         <div className="flex flex-col w-full gap-3 md:gap-5 md:flex-row">

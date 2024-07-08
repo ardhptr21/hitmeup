@@ -8,9 +8,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { auth } from "@/lib/auth";
+import { totalUserRoom } from "@/repositories/room";
 import { Inbox } from "lucide-react";
+import Link from "next/link";
 
-export default function Panel() {
+export default async function Panel() {
+  const { user } = (await auth())!;
+  const totalRoom = await totalUserRoom(user.id);
+
   return (
     <>
       <section className="container">
@@ -19,15 +25,19 @@ export default function Panel() {
       <section className="container flex flex-col gap-5 my-10 md:flex-row">
         <Card className="max-w-xl">
           <CardHeader>
-            <CardTitle className="text-2xl">Welcome, Ardh!</CardTitle>
+            <CardTitle className="text-2xl">
+              Welcome, {user.username}!
+            </CardTitle>
             <CardDescription className="max-w-md">
               This is your dashboard. You can manage your room, profile, and
               settings here. Get started by creating a new room.
             </CardDescription>
           </CardHeader>
           <CardFooter>
-            <Button className="gap-2">
-              <Inbox /> New Room
+            <Button asChild className="gap-2">
+              <Link href="/panel/room/new">
+                <Inbox /> New Room
+              </Link>
             </Button>
           </CardFooter>
         </Card>
@@ -41,7 +51,7 @@ export default function Panel() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <h3 className="text-6xl font-bold">0</h3>
+            <h3 className="text-6xl font-bold">{totalRoom}</h3>
           </CardContent>
         </Card>
       </section>
