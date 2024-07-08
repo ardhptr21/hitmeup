@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { getMessagesByRoom } from "@/repositories/messages";
-import { isRoomExists } from "@/repositories/room";
+import { isRoomWithUserExists } from "@/repositories/room";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
@@ -16,7 +16,7 @@ export const GET = async (
 
   const roomId = parseInt(params.roomId);
 
-  const roomExsists = await isRoomExists(roomId);
+  const roomExsists = await isRoomWithUserExists(session.user.id, roomId);
 
   if (!roomExsists) {
     return NextResponse.json({

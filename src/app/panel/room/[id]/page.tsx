@@ -21,7 +21,7 @@ export default async function DetailRoomPanel({
         <PanelTitle>Detail Room</PanelTitle>
       </section>
       <section className="container flex flex-col items-start gap-10 my-10 lg:flex-row">
-        <SideRoom room={room} />
+        <SideRoom userId={user.id} room={room} />
         <MessageList roomId={room.id} />
       </section>
     </>

@@ -5,8 +5,8 @@ export const totalUserRoom = async (userId: number) => {
   return await db.room.count({ where: { userId } });
 };
 
-export const isRoomExists = async (roomId: number) => {
-  const count = await db.room.count({ where: { id: roomId } });
+export const isRoomWithUserExists = async (userId: number, roomId: number) => {
+  const count = await db.room.count({ where: { id: roomId, userId } });
   return count > 0;
 };
 
@@ -32,4 +32,11 @@ export const detailUserRoom = async (userId: number, roomId: number) => {
 
 export const newRoom = async (data: Prisma.RoomCreateInput) => {
   return await db.room.create({ data });
+};
+
+export const editRoomUser = async (
+  roomId: number,
+  data: Prisma.RoomUpdateInput
+) => {
+  return await db.room.update({ where: { id: roomId }, data });
 };

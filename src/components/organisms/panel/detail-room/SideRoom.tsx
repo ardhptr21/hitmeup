@@ -6,13 +6,18 @@ import { Room } from "@prisma/client";
 import { useState } from "react";
 
 type SideRoomProps = {
+  userId: number;
   room: Room;
 };
 
-export default function SideRoom({ room }: SideRoomProps) {
+export default function SideRoom({ room, userId }: SideRoomProps) {
   const [isEdit, setIsEdit] = useState(false);
   return isEdit ? (
-    <EditableSideRoom room={room} onCancel={() => setIsEdit(false)} />
+    <EditableSideRoom
+      userId={userId}
+      room={room}
+      onCancel={() => setIsEdit(false)}
+    />
   ) : (
     <InfoSideRoom room={room} onEdit={() => setIsEdit(true)} />
   );
